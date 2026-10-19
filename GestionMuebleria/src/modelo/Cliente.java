@@ -1,14 +1,10 @@
 package modelo;
-
-public class Cliente {
-
-    private int idCliente;
-    private String nombre;
+public class Cliente extends Persona {
     private String telefono;
-    private String email;
-    private String direccion;
-
-    public Cliente() {
+    public Cliente(int id, String nombre, String telefono) {
+        super(id, nombre); this.telefono = telefono == null ? "" : telefono;
     }
-
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono == null ? "" : telefono; }
+    @Override public String mostrarInformacion() { return "Cliente #" + getId() + " - " + getNombre() + " - Tel: " + telefono; }
 }
