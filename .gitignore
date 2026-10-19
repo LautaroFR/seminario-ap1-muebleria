@@ -1,0 +1,12 @@
+# Archivos compilados de Java
+*.class
+GestionMuebleria/out/
+
+# Configuración local y credenciales
+.env
+.env.*
+*.log
+
+# Archivos temporales
+.DS_Store
+Thumbs.db
