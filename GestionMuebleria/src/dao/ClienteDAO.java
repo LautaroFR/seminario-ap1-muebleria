@@ -3,7 +3,7 @@ import modelo.Cliente;
 import util.Conexion;
 import java.sql.*;
 import java.util.*;
-public class ClienteDAO {
+public class ClienteDAO implements Repositorio<Cliente> {
     public Cliente registrar(String nombre, String telefono) throws SQLException {
         new Cliente(1, nombre, telefono); // valida antes de insertar
         String sql = "INSERT INTO cliente(nombre,telefono) VALUES (?,?)";
@@ -13,13 +13,13 @@ public class ClienteDAO {
             throw new SQLException("No se genero ID de cliente");
         }
     }
-    public List<Cliente> listar() throws SQLException {
-        List<Cliente> lista=new ArrayList<>();
+    @Override public ArrayList<Cliente> listar() throws SQLException {
+        ArrayList<Cliente> lista=new ArrayList<>();
         try(Connection c=Conexion.conectar(); PreparedStatement ps=c.prepareStatement("SELECT id_cliente,nombre,telefono FROM cliente ORDER BY nombre,id_cliente");ResultSet r=ps.executeQuery()) {
             while(r.next())lista.add(new Cliente(r.getInt(1),r.getString(2),r.getString(3)));
         }return lista;
     }
-    public Cliente buscar(int id) throws SQLException {
+    @Override public Cliente buscar(int id) throws SQLException {
         try(Connection c=Conexion.conectar();PreparedStatement ps=c.prepareStatement("SELECT id_cliente,nombre,telefono FROM cliente WHERE id_cliente=?")){
             ps.setInt(1,id);try(ResultSet r=ps.executeQuery()){
                 if(r.next())return new Cliente(r.getInt(1),r.getString(2),r.getString(3));

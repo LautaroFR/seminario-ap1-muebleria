@@ -4,7 +4,7 @@ import util.Conexion;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
-public class PedidoDAO {
+public class PedidoDAO implements Repositorio<Pedido> {
     private final ClienteDAO clientes=new ClienteDAO();
     public Pedido registrar(int clienteId,String descripcion,BigDecimal precio) throws SQLException {
         Cliente cliente=clientes.buscar(clienteId);
@@ -40,15 +40,15 @@ public class PedidoDAO {
             }
         }return p;
     }
-    public Pedido buscar(int id) throws SQLException {
+    @Override public Pedido buscar(int id) throws SQLException {
         try(Connection c=Conexion.conectar();PreparedStatement ps=c.prepareStatement("SELECT * FROM pedido WHERE id_pedido=?")){
             ps.setInt(1,id);try(ResultSet r=ps.executeQuery()){
                 if(r.next())return cargar(r);
             }
         }throw new NoSuchElementException("Pedido inexistente: "+id);
     }
-    public List<Pedido> listar() throws SQLException {
-        List<Pedido> lista=new ArrayList<>();
+    @Override public ArrayList<Pedido> listar() throws SQLException {
+        ArrayList<Pedido> lista=new ArrayList<>();
         try(Connection c=Conexion.conectar();PreparedStatement ps=c.prepareStatement("SELECT id_pedido FROM pedido ORDER BY id_pedido");ResultSet r=ps.executeQuery()){
             while(r.next())lista.add(buscar(r.getInt(1)));
         }return lista;
